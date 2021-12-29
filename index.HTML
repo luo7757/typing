@@ -6,7 +6,7 @@
 	<style type="text/css">
 		body {
 			overflow: hidden;
-			background-image: url('./ChMkJlauzSaIQ6NyAAE55Vazv3EAAH9DADoY9cAATn9447.jpg');
+			background-image: url('./img/ChMkJlauzSaIQ6NyAAE55Vazv3EAAH9DADoY9cAATn9447.jpg');
 			background-size: cover;
 		}
 
@@ -86,7 +86,7 @@
 			var letter = createNum.toString(36).toUpperCase();
 			// toString（36）：范围（2-36） radix值，36进制组成： 前十位：0~9，后11到36位：a~z；
 			// toUpperCase 将变量里的随机小写字母变成大写字母A~Z
-			img.src = letter + '.png';
+			img.src = `./img/${letter}.png`;
 			// 添加图片地址，letter为随机大写字母。A~Z
 			img.title = letter;
 			// 将生成的大写字母添加到img的title属性中，图片地址为生成的一个大写字母（如A）+.png，
