@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		body{
+			overflow: hidden;
+			background-image: url(ChMkJlauzSaIQ6NyAAE55Vazv3EAAH9DADoY9cAATn9447.jpg);
+			background-size: cover;
+		}
+
+		.box1,
+		.box2{
+			position: absolute;
+			width: 200px;
+			height: 200px;
+			text-align: center;
+			line-height: 100px;
+			font-size: 30px;
+			font-family: serif;
+		}
+
+		.box1{
+			left: 0;
+		}
+
+		.box2{
+			right: 0;
+		}
+	</style>
+</head>
+<body>
+	<div id="score" class="box1">0分</div>
+	<div id="time" class="box2">0秒</div>
+	<script type="text/javascript">
+		var winWidth = window.innerWidth;
+		var winHeight = window.innerHeight;
+		// 获取视口的宽高
+
+		var scoring = document.getElementById('score');
+		var timer = document.getElementById('time');
+		// 选中2个div
+
+		var scores = 0,
+			times = 0,
+			imgArr = [],
+			createSpeed = 1000,
+			moveSpeed = 25;
+		// 声明一些变量。
+
+		function numRandom (max,min) {
+			if (min === undefined) {
+				min = 0;
+			}
+			return Math.random() * (max - min) + min;
+		}
+		// 创建一个随机数函数
+
+		var stopCreateImg = setInterval(function () {
+			createImg();
+		},createSpeed)
+
+		var stopMoveImg = setInterval(function () {
+			moveImg();
+		},moveSpeed)
+
+		var timerMove = setInterval(function(){
+			times ++ ;
+			timer.innerHTML = times + '秒';
+		},1000)
+		// 每秒时间加1，并添加到选中的timer中。
+
+		function createImg() {
+			var img = document.createElement('img');
+			document.body.appendChild(img);
+			// 创建img标签，添加到body中。
+			img.style.position = 'absolute';
+			// 创建的元素增加定位，才能移动。
+			img.style.top = winHeight + 'px'
+			img.style.left = numRandom(winWidth - 80) + 'px';
+			// 设置元素生成位置在视口最下方。
+			var createNum = parseInt(Math.floor(numRandom(36, 10)));
+			// 调用随机数函数,均衡生成10到36之间的数,并取整保存到一个变量里。
+			var letter = createNum.toString(36).toUpperCase();
+			// toString（36）：范围（2-36） radix值，36进制组成： 前十位：0~9，后11到36位：a~z；
+			// toUpperCase 将变量里的随机小写字母变成大写字母A~Z
+			img.src = letter + '.png';
+			// 添加图片地址，letter为随机大写字母。A~Z
+			img.title = letter;
+			// 将生成的大写字母添加到img的title属性中，图片地址为生成的一个大写字母（如A）+.png，
+			// 而title属性为生成的大写字母（如A），这样就确定了图片上的字母和title属性的字母一致。
+			// 监控键盘事件时，即可保证图片A，title属性为A，对应键盘A。
+			imgArr.push(img);
+			// 将此次生成的图片添加到数组中。假如本次是第一次生成图片为A图片，地址为A.png，title为A，位于数组第0位
+			// console.log(img);
+			// console.log(imgArr);
+
+			// document.body.appendChild(img);好像上边下边没啥区别。
+		}
+
+		function moveImg() {
+			for (var i = 0; i < imgArr.length; i++) {
+				// 遍历数组，数组现存的元素，依次提取出来，进行操作。
+				imgMove = imgArr[i];
+				// 将数组的内容依次保存到变量中，好进行操作。
+				var imgTop = parseInt(imgMove.style.top);
+				// 获取当前元素的top值。
+				imgTop --;
+				// for循环，每次当前元素top减一。
+				imgMove.style.top = imgTop + 'px';
+				// top自减的结果添加到当前元素的样式中，即可移动。
+				if (imgTop === 0) {
+					clearInterval(stopCreateImg);
+					clearInterval(stopMoveImg);
+					clearInterval(timerMove);
+					window.onkeydown = null;
+					alert('game over');
+				//条件判断，游戏规则为气球碰到顶部(top === 0)，游戏结束。取消相应的生成图片、图片移动、计时的定时器，并将键盘事件取消。 
+				}
+			}
+
+		}
+
+		window.onkeydown = function (event) {
+			// 键盘事件keydown，event为触发事件的对象。
+			var key = event.key.toUpperCase();
+			// 获得触发键盘事件的键位，为小写字母，toUpperCase转为大写字母，保存到变量中。
+			// console.log(event.key);
+			// console.log(key);
+			for (var i = 0; i < imgArr.length; i++) {
+			// 遍历元素的数组。
+				var imgLetter = imgArr[i];
+				// 依次取出保存。
+				if (imgLetter.title === key) {
+					// 条件判断，元素的title属性值 是否完全等于 键盘事件获取的转换后为大写字母的值。
+					document.body.removeChild(imgLetter)
+					// 条件成立，清除body中对应的元素标签。
+					imgArr.splice(i, 1);
+					// 删除一位在与i对应的数组位置的元素。 
+					// splice(i,1)第一参数为数组中的位置，第二个参数为删除的数量。
+					scores++;
+					variableSpeed(scores);
+					// scores变量每次条件成立，自增。调用variableSpeed函数，传参scores。每当条件成立即页面少一个元素，用于计算分数。
+					scoring.innerHTML = scores + '分';
+					// 结果添加到页面中。
+					break;
+					// 如果不写break来停止循环，那么当数组中有多个相同元素时，应该是每次消除一个元素，但for循环会遍历完数组，那么后产生的相同元素也会被删除。即按一次键多个相同元素消除了，虽然分数等没问题，但这不是我们想要的效果。
+				}
+			}
+		}
+
+		function variableSpeed(scores){
+			// 变速当分数达到一定条件，改变生成图片、图片移动定时器的时间。
+			if (scores >= 0 && scores < 5) {
+				moveSpeed = 20;
+				createSpeed = 700;
+			}else if (scores >= 10 && scores < 20) {
+				moveSpeed = 15;
+				createSpeed = 500;
+			}else if (scores >= 30 && scores < 40) {
+				moveSpeed= 10;
+				createSpeed = 300;
+			}else{
+				moveSpeed = 10;
+				createSpeed= 200;
+			}
+
+			clearInterval(stopMoveImg);
+			clearInterval(stopCreateImg);
+			// 注意每次执行函数时都会清除一次定时器，并启动一次定时器。
+			stopCreateImg = setInterval(function () {
+			createImg();
+			},createSpeed)
+
+			stopMoveImg = setInterval(function () {
+			moveImg();
+			},moveSpeed)
+			// 当scores条件成立时，moveSpeed、createSpeed参数改变，并启动定时器。
+		}
+		
+	</script>
+</body>
+</html>
