@@ -1,16 +1,17 @@
 <!DOCTYPE html>
 <html>
+
 <head>
 	<title></title>
 	<style type="text/css">
-		body{
+		body {
 			overflow: hidden;
-			background-image: url(ChMkJlauzSaIQ6NyAAE55Vazv3EAAH9DADoY9cAATn9447.jpg);
+			background-image: url('./ChMkJlauzSaIQ6NyAAE55Vazv3EAAH9DADoY9cAATn9447.jpg');
 			background-size: cover;
 		}
 
 		.box1,
-		.box2{
+		.box2 {
 			position: absolute;
 			width: 200px;
 			height: 200px;
@@ -20,15 +21,16 @@
 			font-family: serif;
 		}
 
-		.box1{
+		.box1 {
 			left: 0;
 		}
 
-		.box2{
+		.box2 {
 			right: 0;
 		}
 	</style>
 </head>
+
 <body>
 	<div id="score" class="box1">0分</div>
 	<div id="time" class="box2">0秒</div>
@@ -48,7 +50,7 @@
 			moveSpeed = 25;
 		// 声明一些变量。
 
-		function numRandom (max,min) {
+		function numRandom(max, min) {
 			if (min === undefined) {
 				min = 0;
 			}
@@ -58,16 +60,16 @@
 
 		var stopCreateImg = setInterval(function () {
 			createImg();
-		},createSpeed)
+		}, createSpeed)
 
 		var stopMoveImg = setInterval(function () {
 			moveImg();
-		},moveSpeed)
+		}, moveSpeed)
 
-		var timerMove = setInterval(function(){
-			times ++ ;
+		var timerMove = setInterval(function () {
+			times++;
 			timer.innerHTML = times + '秒';
-		},1000)
+		}, 1000)
 		// 每秒时间加1，并添加到选中的timer中。
 
 		function createImg() {
@@ -105,7 +107,7 @@
 				// 将数组的内容依次保存到变量中，好进行操作。
 				var imgTop = parseInt(imgMove.style.top);
 				// 获取当前元素的top值。
-				imgTop --;
+				imgTop--;
 				// for循环，每次当前元素top减一。
 				imgMove.style.top = imgTop + 'px';
 				// top自减的结果添加到当前元素的样式中，即可移动。
@@ -115,7 +117,7 @@
 					clearInterval(timerMove);
 					window.onkeydown = null;
 					alert('game over');
-				//条件判断，游戏规则为气球碰到顶部(top === 0)，游戏结束。取消相应的生成图片、图片移动、计时的定时器，并将键盘事件取消。 
+					//条件判断，游戏规则为气球碰到顶部(top === 0)，游戏结束。取消相应的生成图片、图片移动、计时的定时器，并将键盘事件取消。 
 				}
 			}
 
@@ -128,7 +130,7 @@
 			// console.log(event.key);
 			// console.log(key);
 			for (var i = 0; i < imgArr.length; i++) {
-			// 遍历元素的数组。
+				// 遍历元素的数组。
 				var imgLetter = imgArr[i];
 				// 依次取出保存。
 				if (imgLetter.title === key) {
@@ -149,35 +151,35 @@
 			}
 		}
 
-		function variableSpeed(scores){
+		function variableSpeed(scores) {
 			// 变速当分数达到一定条件，改变生成图片、图片移动定时器的时间。
 			if (scores >= 0 && scores < 5) {
 				moveSpeed = 20;
 				createSpeed = 700;
-			}else if (scores >= 10 && scores < 20) {
+			} else if (scores >= 10 && scores < 20) {
 				moveSpeed = 15;
 				createSpeed = 500;
-			}else if (scores >= 30 && scores < 40) {
-				moveSpeed= 10;
-				createSpeed = 300;
-			}else{
+			} else if (scores >= 30 && scores < 40) {
 				moveSpeed = 10;
-				createSpeed= 200;
+				createSpeed = 300;
+			} else {
+				moveSpeed = 10;
+				createSpeed = 200;
 			}
 
 			clearInterval(stopMoveImg);
 			clearInterval(stopCreateImg);
 			// 注意每次执行函数时都会清除一次定时器，并启动一次定时器。
 			stopCreateImg = setInterval(function () {
-			createImg();
-			},createSpeed)
+				createImg();
+			}, createSpeed)
 
 			stopMoveImg = setInterval(function () {
-			moveImg();
-			},moveSpeed)
+				moveImg();
+			}, moveSpeed)
 			// 当scores条件成立时，moveSpeed、createSpeed参数改变，并启动定时器。
 		}
-		
 	</script>
 </body>
+
 </html>
